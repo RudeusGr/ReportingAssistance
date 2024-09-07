@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\corona_extra.jpg" />
+    <None Remove="Images\down_icon.png" />
+    <None Remove="Images\excel_icon.png" />
+    <None Remove="Images\logo_grupo_modelo.png" />
+    <None Remove="Images\modelo_especial.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\corona_extra.jpg" />
+    <Resource Include="Images\down_icon.png" />
+    <Resource Include="Images\excel_icon.png" />
+    <Resource Include="Images\logo_grupo_modelo.png" />
+    <Resource Include="Images\modelo_especial.jpg" />
+  </ItemGroup>
+
+</Project>
