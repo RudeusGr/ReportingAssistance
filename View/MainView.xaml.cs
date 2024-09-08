@@ -5,20 +5,9 @@ using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
 using ReportingAssistance.Model;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ReportingAssistance.View
 {
@@ -81,61 +70,89 @@ namespace ReportingAssistance.View
 
             using (var workbook = new XLWorkbook())
             {
-                var worksheet = workbook.Worksheets.Add("Asistencias - Ventas");
-                worksheet.Cell("A1").Value = $"Reporte de Asistencias de personal de ruta del dia {DateInitial} al {DateFinal}";
-                worksheet.Range("A1:F1").Row(1).Merge();
-                worksheet.Cell("A2").Value = "ID Empleado";
-                worksheet.Cell("B2").Value = "Nombre";
-                worksheet.Cell("C2").Value = "Dias trabajados";
-                worksheet.Cell("D2").Value = "Retrasos";
-                worksheet.Cell("E2").Value = "Bono puntualidad";
-                worksheet.Cell("F2").Value = "Bultos";
-                worksheet.Cell("G2").Value = "Bono venta";
+                var worksheet = workbook.Worksheets.Add("Asistencias - Rutas");
+                worksheet.ShowGridLines = false;
 
-                int row = 3;
+                //title
+                worksheet.Range("A1:K2").Merge();
+                worksheet.Cell("A1").Style.Fill.BackgroundColor = XLColor.DarkBlue;
+                worksheet.Cell("A1").Style.Font.FontColor = XLColor.White;
+                worksheet.Cell("A1").Style.Font.FontSize = 20;
+                worksheet.Cell("A1").Style.Font.FontName = "Arial Rounded MT Bold";
+                worksheet.Cell("A1").Value = $"Reporte de Asistencias de personal de ruta del dia {DateInitial} al {DateFinal}";
+
+                //columns
+                worksheet.Range("A3:A4").Merge();
+                worksheet.Cell("A3").Value = "ID Empleado";
+                worksheet.Range("B3:D4").Merge();
+                worksheet.Cell("B3").Value = "Nombre Empleado";
+                worksheet.Range("E3:F4").Merge();
+                worksheet.Cell("E3").Value = "Dias Trabajados";
+                worksheet.Range("G3:G4").Merge();
+                worksheet.Cell("G3").Value = "Retrasos";
+                worksheet.Range("H3:I4").Merge();
+                worksheet.Cell("H3").Value = "Bono Puntualidad";
+                worksheet.Range("J3:J4").Merge();
+                worksheet.Cell("J3").Value = "Bultos";
+                worksheet.Range("K3:K4").Merge();
+                worksheet.Cell("K3").Value = "Bono Venta";
+
+                worksheet.Range("A3:K4").Style.Fill.BackgroundColor = XLColor.Orange;
+                worksheet.Range("A3:K4").Style.Font.FontColor = XLColor.White;
+                worksheet.Range("A3:K4").Style.Font.FontSize = 14;
+                worksheet.Range("A3:K4").Style.Font.FontName = "Arial Rounded MT Bold";
+
+                int row = 5;
 
                 foreach (var employee in DicEmployees)
                 {
                     worksheet.Cell("A" + row).Value = employee.Value.Id;
+                    worksheet.Range("B" + row + ":D" + row).Merge();
                     worksheet.Cell("B" + row).Value = employee.Value.Name;
-                    worksheet.Cell("C" + row).Value = employee.Value.Assistance;
-                    worksheet.Cell("D" + row).Value = employee.Value.Delays;
+                    worksheet.Range("E" + row + ":F" + row).Merge();
+                    worksheet.Cell("E" + row).Value = employee.Value.Assistance;
+                    worksheet.Cell("G" + row).Value = employee.Value.Delays;
+                    worksheet.Range("H" + row + ":I" + row).Merge();
                     if (employee.Value.Assistance < DaysWorked || employee.Value.Delays >= 2)
                     {
-                        worksheet.Cell("E" + row).Value = 0;
+                        worksheet.Cell("H" + row).Value = 0;
                     }
                     else
                     {
-                        worksheet.Cell("E" + row).Value = 7 * 50;
+                        worksheet.Cell("H" + row).Value = 7 * 50;
                     }
 
-                    worksheet.Cell("F" + row).Value = employee.Value.Bulk;
+                    worksheet.Cell("J" + row).Value = employee.Value.Bulk;
 
                     decimal commission = (decimal)(employee.Value.Bulk * .15);
 
                     if (commission >= 300)
                     {
-                        worksheet.Cell("G" + row).Value = 300;
+                        worksheet.Cell("K" + row).Value = 300;
                     }
                     else if (commission <= 150)
                     {
-                        worksheet.Cell("G" + row).Value = 150;
+                        worksheet.Cell("K" + row).Value = 150;
                     }
                     else
                     {
-                        worksheet.Cell("G" + row).Value = commission;
+                        worksheet.Cell("K" + row).Value = commission;
                     }
 
                     row++;
                 }
 
-                worksheet.Column(1).AdjustToContents();
-                worksheet.Column(2).AdjustToContents();
-                worksheet.Column(3).AdjustToContents();
-                worksheet.Column(4).AdjustToContents();
-                worksheet.Column(5).AdjustToContents();
-                worksheet.Column(6).AdjustToContents();
-                worksheet.Column(7).AdjustToContents();
+                worksheet.Column("A").Width = 17;
+                worksheet.Column("B").Width = 12;
+                worksheet.Column("C").Width = 12;
+                worksheet.Column("D").Width = 12;
+                worksheet.Column("E").Width = 11;
+                worksheet.Column("F").Width = 11;
+                worksheet.Column("G").Width = 15;
+                worksheet.Column("H").Width = 12;
+                worksheet.Column("I").Width = 12;
+                worksheet.Column("J").Width = 10;
+                worksheet.Column("K").Width = 15;
 
                 workbook.SaveAs(PathDir + $"Reporte Asistencia {DateTime.Now:yyyy-MM-dd HH.mm.ss}.xlsx");
                 workbook.Dispose();
@@ -276,6 +293,7 @@ namespace ReportingAssistance.View
                 for (int i = 1; i <= lastRow; i++)
                 {
                     IXLRow currentRow = sheet.Row(i);
+                    sheet.Cells().Style.Fill.BackgroundColor = XLColor.White;
 
                     string currentDateInsert = currentRow.Cell(1).GetString().Remove(10);
                     int currentEmployeeInsert = currentRow.Cell(2).GetValue<int>();
