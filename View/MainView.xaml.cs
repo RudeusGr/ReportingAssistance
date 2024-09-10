@@ -27,7 +27,6 @@ namespace ReportingAssistance.View
         private String? FilePathAssistance;
         private string? DateInitial;
         private string? DateFinal;
-        private readonly int DaysWorked = 6;
         private Dictionary<int, Employee> DicEmployees = new();
         private readonly String PathDir = $"C:\\Users\\{System.Security.Principal.WindowsIdentity.GetCurrent().Name.Split('\\')[1]}\\Documents\\ReportingAssistance\\";
 
@@ -59,6 +58,7 @@ namespace ReportingAssistance.View
 
         private void btnRegenerateReport_Click(object sender, RoutedEventArgs e)
         {
+
             if (FilePathBiotimer is null || FilePathAssistance is null)
             {
                 MessageBox.Show("Hace flata que cargue algun archivo, ya sea el arhivo de biotimer o el de asistencia, favor de verificar", "Falta cargar algun archivo");
@@ -122,7 +122,7 @@ namespace ReportingAssistance.View
                 worksheet.Range("L3:M4").Merge();
                 worksheet.Cell("L3").Value = "Salario Diario";
                 worksheet.Range("N3:O4").Merge();
-                worksheet.Cell("N3").Value = "Sub Total";
+                worksheet.Cell("N3").Value = "Total Por Dias";
                 worksheet.Range("P3:P4").Merge();
                 worksheet.Cell("P3").Value = "Total";
 
@@ -142,19 +142,25 @@ namespace ReportingAssistance.View
                     worksheet.Cell("E" + row).Value = employee.Value.Assistance;
                     worksheet.Cell("G" + row).Value = employee.Value.Delays;
                     worksheet.Range("H" + row + ":I" + row).Merge();
-                    if (employee.Value.Assistance < DaysWorked || employee.Value.Delays >= 2)
+
+                    decimal bonusPunctuality = 0;
+
+                    //bono puntualidad
+                    if (employee.Value.Assistance < 6 || employee.Value.Delays >= 2)
                     {
-                        worksheet.Cell("H" + row).Value = 0;
+                        worksheet.Cell("H" + row).Value = bonusPunctuality;
                     }
                     else
                     {
-                        worksheet.Cell("H" + row).Value = 7 * 50;
+                        bonusPunctuality = 7 * 50;
+                        worksheet.Cell("H" + row).Value = bonusPunctuality;
                     }
 
+                    //bultos cargados
                     worksheet.Cell("J" + row).Value = employee.Value.Bulk;
 
+                    //Comision por bultos
                     decimal commission = (decimal)(employee.Value.Bulk * .15);
-
                     if (commission >= 300)
                     {
                         worksheet.Cell("K" + row).Value = 300;
@@ -170,11 +176,14 @@ namespace ReportingAssistance.View
                         worksheet.Cell("K" + row).Value = commission;
                     }
 
+                    //salario Diario
                     worksheet.Range("L" + row + ":M" + row).Merge();
                     worksheet.Cell("L" + row).Value = employee.Value.isDriver ? salaryDriver : salaryAux;
+                    //sub total (salario por dia trabajado)
                     worksheet.Range("N" + row + ":O" + row).Merge();
-                    worksheet.Cell("N" + row).Value = employee.Value.Assistance * (employee.Value.isDriver ? salaryDriver : salaryAux);
-                    worksheet.Cell("P" + row).Value = (employee.Value.Assistance * (employee.Value.isDriver ? salaryDriver : salaryAux)) + commission;
+                    worksheet.Cell("N" + row).Value = ((employee.Value.Assistance == 6 ? employee.Value.Assistance + 1: employee.Value.Assistance) * (employee.Value.isDriver ? salaryDriver : salaryAux)) + (employee.Value.isWorkMonday ? (employee.Value.isDriver ? salaryDriver : salaryAux) : 0);
+                    //total
+                    worksheet.Cell("P" + row).Value = bonusPunctuality + commission + ((employee.Value.Assistance == 6 ? employee.Value.Assistance + 1 : employee.Value.Assistance) * (employee.Value.isDriver ? salaryDriver : salaryAux)) + (employee.Value.isWorkMonday ? (employee.Value.isDriver ? salaryDriver : salaryAux) : 0);
 
                     row++;
                 }
@@ -297,6 +306,7 @@ namespace ReportingAssistance.View
                     }
 
                     employee.AssistancesIncremente();
+                    employee.isWorkMonday = (int)DateTime.Parse(dateEmployee).DayOfWeek == 0 || employee.isWorkMonday;
                 }
                 workbook.Dispose();
             }
