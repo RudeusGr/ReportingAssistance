@@ -16,6 +16,7 @@ namespace ReportingAssistance.Model
             Assistance = 0;
             Delays = 0;
             DicRouteDate = new();
+            isDriver = false;
         }
         public void AssistancesIncremente()
         {
@@ -30,6 +31,7 @@ namespace ReportingAssistance.Model
         public int Bulk { get; set; }
         public int Assistance { get; set; }
         public int Delays { get; set; }
+        public bool isDriver { get; set; }
         public Dictionary<string, int> DicRouteDate { get; set; }
     }
 

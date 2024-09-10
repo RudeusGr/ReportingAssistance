@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReportingAssistance.View"
         mc:Ignorable="d"
-        Title="MainView" Height="500" Width="800"
+        Title="MainView" Height="600" Width="800"
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -20,7 +20,7 @@
 
         <Border CornerRadius="10"
             BorderThickness="2"
-            Opacity=".90">
+            Opacity=".95">
 
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -185,7 +185,7 @@
                              CaretBrush="LightGray"
                              BorderBrush="DarkGray"
                              BorderThickness="0,0,0,2"
-                             Width="500"
+                             Width="400"
                              HorizontalAlignment="Left"
                              VerticalContentAlignment="Center"
                              Padding="20,0,0,0">
@@ -195,7 +195,7 @@
                                         Stretch="None"
                                         AlignmentX="Left"/>
                         </TextBox.Background>
-                        
+
                     </TextBox>
 
                     <Button x:Name="btnSearhFileAssistanceRoute"
@@ -242,7 +242,7 @@
                             CaretBrush="LightGray"
                             BorderBrush="DarkGray"
                             BorderThickness="0,0,0,2"
-                            Width="500"
+                            Width="400"
                             HorizontalAlignment="Left"
                             VerticalContentAlignment="Center"
                             Padding="20,0,0,0">
@@ -254,6 +254,56 @@
                         </TextBox.Background>
 
                     </TextBox>
+
+                    <TextBox x:Name="txtSalaryDriver"
+                         FontSize="14"
+                         FontWeight="Medium"
+                         FontFamily="Montserrat"
+                         Foreground="White"
+                         CaretBrush="LightGray"
+                         BorderBrush="DarkGray"
+                         BorderThickness="0,0,0,2"
+                         Width="300"
+                         HorizontalAlignment="Right"
+                         VerticalContentAlignment="Center"
+                         Margin="0,20,0,0"
+                         Padding="20,0,0,0"
+                         TextChanged="txtSalaryDriver_TextChanged">
+
+                        <TextBox.Background>
+                            <ImageBrush ImageSource="../Images/payment_icon.png"
+                                        Stretch="None"
+                                        AlignmentX="Left"/>
+                        </TextBox.Background>
+
+                    </TextBox>
+
+                    <Label x:Name="txtSalaryDriverPlaceholder" HorizontalAlignment="Right" Foreground="White" FontSize="12" Margin="0,-25,180,0" Content="Salario Chofer..." Background="Transparent" Opacity="0.5" IsHitTestVisible="False"/>
+
+                    <TextBox x:Name="txtSalaryAux"
+                         FontSize="14"
+                         FontWeight="Medium"
+                         FontFamily="Montserrat"
+                         Foreground="White"
+                         CaretBrush="LightGray"
+                         BorderBrush="DarkGray"
+                         BorderThickness="0,0,0,2"
+                         Width="300"
+                         HorizontalAlignment="Right"
+                         VerticalContentAlignment="Center"
+                         Margin="0,20,0,0"
+                         Padding="20,0,0,0"
+                         TextChanged="txtSalaryAux_TextChanged">
+
+                        <TextBox.Background>
+                            <ImageBrush ImageSource="../Images/payment_icon.png"
+                                        Stretch="None"
+                                        AlignmentX="Left"/>
+                        </TextBox.Background>
+
+                    </TextBox>
+
+                    <Label x:Name="txtSalaryAuxPlaceholder" HorizontalAlignment="Right" Foreground="White" FontSize="12" Margin="0,-25,180,0" Content="Salario Auxiliar..." Background="Transparent" Opacity="0.5" IsHitTestVisible="False"/>
 
                     <Button x:Name="btnRegenerateReport"
                             BorderThickness="0"

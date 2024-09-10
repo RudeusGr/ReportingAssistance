@@ -11,9 +11,11 @@
   <ItemGroup>
     <None Remove="Images\corona_extra.jpg" />
     <None Remove="Images\down_icon.png" />
+    <None Remove="Images\employee-icon.png" />
     <None Remove="Images\excel_icon.png" />
     <None Remove="Images\logo_grupo_modelo.png" />
     <None Remove="Images\modelo_especial.jpg" />
+    <None Remove="Images\payment_icon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,9 +27,11 @@
   <ItemGroup>
     <Resource Include="Images\corona_extra.jpg" />
     <Resource Include="Images\down_icon.png" />
+    <Resource Include="Images\employee-icon.png" />
     <Resource Include="Images\excel_icon.png" />
     <Resource Include="Images\logo_grupo_modelo.png" />
     <Resource Include="Images\modelo_especial.jpg" />
+    <Resource Include="Images\payment_icon.png" />
   </ItemGroup>
 
 </Project>

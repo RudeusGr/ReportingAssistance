@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Dapper;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using DocumentFormat.OpenXml.Packaging;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
@@ -7,6 +8,7 @@ using Microsoft.Win32;
 using ReportingAssistance.Model;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ReportingAssistance.View
@@ -21,10 +23,10 @@ namespace ReportingAssistance.View
             InitializeComponent();
         }
 
-        private String FilePathBiotimer;
-        private String FilePathAssistance;
-        private string DateInitial;
-        private string DateFinal;
+        private String? FilePathBiotimer;
+        private String? FilePathAssistance;
+        private string? DateInitial;
+        private string? DateFinal;
         private readonly int DaysWorked = 6;
         private Dictionary<int, Employee> DicEmployees = new();
         private readonly String PathDir = $"C:\\Users\\{System.Security.Principal.WindowsIdentity.GetCurrent().Name.Split('\\')[1]}\\Documents\\ReportingAssistance\\";
@@ -68,13 +70,34 @@ namespace ReportingAssistance.View
                 Directory.CreateDirectory(PathDir);
             }
 
+
+            if (txtSalaryAux.Text == "" || txtSalaryDriver.Text == "")
+            {
+                MessageBox.Show("Asegurese de haber llenado los campos de salarios.", "Salarios no proporcionados");
+                return;
+            }
+
+            decimal salaryDriver;
+            decimal salaryAux;
+
+            try
+            {
+                salaryDriver = decimal.Parse(txtSalaryDriver.Text);
+                salaryAux = decimal.Parse(txtSalaryAux.Text);
+            }
+            catch (FormatException fex)
+            {
+                MessageBox.Show($"El campo de salarios debe de ser un numero\n\nError: {fex}", "Error de salarios");
+                return;
+            }
+
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("Asistencias - Rutas");
                 worksheet.ShowGridLines = false;
 
                 //title
-                worksheet.Range("A1:K2").Merge();
+                worksheet.Range("A1:P2").Merge();
                 worksheet.Cell("A1").Style.Fill.BackgroundColor = XLColor.DarkBlue;
                 worksheet.Cell("A1").Style.Font.FontColor = XLColor.White;
                 worksheet.Cell("A1").Style.Font.FontSize = 20;
@@ -96,11 +119,17 @@ namespace ReportingAssistance.View
                 worksheet.Cell("J3").Value = "Bultos";
                 worksheet.Range("K3:K4").Merge();
                 worksheet.Cell("K3").Value = "Bono Venta";
+                worksheet.Range("L3:M4").Merge();
+                worksheet.Cell("L3").Value = "Salario Diario";
+                worksheet.Range("N3:O4").Merge();
+                worksheet.Cell("N3").Value = "Sub Total";
+                worksheet.Range("P3:P4").Merge();
+                worksheet.Cell("P3").Value = "Total";
 
-                worksheet.Range("A3:K4").Style.Fill.BackgroundColor = XLColor.Orange;
-                worksheet.Range("A3:K4").Style.Font.FontColor = XLColor.White;
-                worksheet.Range("A3:K4").Style.Font.FontSize = 14;
-                worksheet.Range("A3:K4").Style.Font.FontName = "Arial Rounded MT Bold";
+                worksheet.Range("A3:P4").Style.Fill.BackgroundColor = XLColor.Orange;
+                worksheet.Range("A3:P4").Style.Font.FontColor = XLColor.White;
+                worksheet.Range("A3:P4").Style.Font.FontSize = 14;
+                worksheet.Range("A3:P4").Style.Font.FontName = "Arial Rounded MT Bold";
 
                 int row = 5;
 
@@ -129,15 +158,23 @@ namespace ReportingAssistance.View
                     if (commission >= 300)
                     {
                         worksheet.Cell("K" + row).Value = 300;
+                        commission = 300;
                     }
                     else if (commission <= 150)
                     {
                         worksheet.Cell("K" + row).Value = 150;
+                        commission = 150;
                     }
                     else
                     {
                         worksheet.Cell("K" + row).Value = commission;
                     }
+
+                    worksheet.Range("L" + row + ":M" + row).Merge();
+                    worksheet.Cell("L" + row).Value = employee.Value.isDriver ? salaryDriver : salaryAux;
+                    worksheet.Range("N" + row + ":O" + row).Merge();
+                    worksheet.Cell("N" + row).Value = employee.Value.Assistance * (employee.Value.isDriver ? salaryDriver : salaryAux);
+                    worksheet.Cell("P" + row).Value = (employee.Value.Assistance * (employee.Value.isDriver ? salaryDriver : salaryAux)) + commission;
 
                     row++;
                 }
@@ -153,6 +190,11 @@ namespace ReportingAssistance.View
                 worksheet.Column("I").Width = 12;
                 worksheet.Column("J").Width = 10;
                 worksheet.Column("K").Width = 15;
+                worksheet.Column("L").Width = 10;
+                worksheet.Column("M").Width = 10;
+                worksheet.Column("N").Width = 10;
+                worksheet.Column("O").Width = 10;
+                worksheet.Column("P").Width = 15;
 
                 workbook.SaveAs(PathDir + $"Reporte Asistencia {DateTime.Now:yyyy-MM-dd HH.mm.ss}.xlsx");
                 workbook.Dispose();
@@ -196,6 +238,11 @@ namespace ReportingAssistance.View
             {
                 MessageBox.Show("No es posible encontrar el archivo, asegurese de haberlo seleccionado.", "Archivo no encontrado");
                 return;
+            } else
+            {
+                DicEmployees.Clear();
+                FilePathAssistance = null;
+                txtFileNameAssistanceRoute.Text = "";
             }
 
             try
@@ -275,6 +322,19 @@ namespace ReportingAssistance.View
                 return;
             }
 
+            if (FilePathBiotimer is null || DateInitial is null || DateFinal is null)
+            {
+                MessageBox.Show("Antes de cargar el archivo de Asistencia, por favor suba el archivo de Biotimer.", "Archivo no encontrado");
+                txtFileNameAssistanceRoute.Text = "";
+                return;
+            }
+
+            foreach (var employee in DicEmployees)
+            {
+                employee.Value.DicRouteDate.Clear();
+                employee.Value.Bulk = 0;
+            }
+
             try
             {
                 XLWorkbook workbook = new(FilePathAssistance);
@@ -283,11 +343,13 @@ namespace ReportingAssistance.View
                 var lastRow = sheet.LastRowUsed().RangeAddress.LastAddress.RowNumber;
 
                 string connectionString = "Server=SOPORTETI\\SQLEXPRESS;Database=employees ;Trusted_Connection=SSPI;MultipleActiveResultSets=true;Trust Server Certificate=true";
+                //string connectionString = "Data Source=DBMSATUXTLA;" +"Initial Catalog=DataBaseName;" + "User id=usrcomersal;" + "Password=Soporte2024;";
 
                 using SqlConnection DBConnection = new(connectionString);
 
                 DBConnection.Open();
                 string sqlQuery = "SELECT [cverut],[fecalt],[venta] FROM [employees].[dbo].[bulktoroute] WHERE (fecalt BETWEEN @DateInitial AND @DateFinal)";
+                //string sqlQuery = "select ruta.cverut as cverut, venta.fecalt as fecalt, sum(detventa.canven) as bultos from tsive035 as venta inner  join tsive037 as detventa  on venta.cvevca = detventa.cvevca  inner join tsive041 as liquida on venta.cverup = liquida.cverup  inner join  tsive003 as ruta on liquida.cverut = ruta.cverut  where  liquida.fecrup between @DateInitial and @DateFinal and ruta.cvempr in (1,3) and venta.estvca  = 1   group by  ruta.cverut , venta.fecalt order by venta.fecalt asc;";
                 var registers = DBConnection.Query(sqlQuery, new { DateInitial = DateTime.Parse(DateInitial), DateFinal = DateTime.Parse(DateFinal) });
 
                 for (int i = 1; i <= lastRow; i++)
@@ -298,6 +360,7 @@ namespace ReportingAssistance.View
                     string currentDateInsert = currentRow.Cell(1).GetString().Remove(10);
                     int currentEmployeeInsert = currentRow.Cell(2).GetValue<int>();
                     int currentRouteInsert = currentRow.Cell(3).GetValue<int>();
+                    string currentIsDriver = currentRow.Cell(4).GetString().Trim().ToLower();
 
                     if (DicEmployees.ContainsKey(currentEmployeeInsert))
                     {
@@ -307,6 +370,7 @@ namespace ReportingAssistance.View
                         {
                             DicEmployees[currentEmployeeInsert].Bulk += rowDatabase.First().venta;
                         }
+                        DicEmployees[currentEmployeeInsert].isDriver = currentIsDriver.Equals("si");
                     }
                     else
                     {
@@ -325,6 +389,30 @@ namespace ReportingAssistance.View
             catch (ArgumentNullException argNullEx)
             {
                 MessageBox.Show($"Ocurrio un error inesperado, existe una referencia nula, por favor notificar al departamento de sistemas.\n Error: {argNullEx.Message}", "Error de ArgumentException");
+            }
+        }
+
+        private void txtSalaryDriver_TextChanged(Object sender, TextChangedEventArgs e)
+        {
+            if (txtSalaryDriver.Text != "")
+            {
+                txtSalaryDriverPlaceholder.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                txtSalaryDriverPlaceholder.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void txtSalaryAux_TextChanged(Object sender, TextChangedEventArgs e)
+        {
+            if (txtSalaryAux.Text != "")
+            {
+                txtSalaryAuxPlaceholder.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                txtSalaryAuxPlaceholder.Visibility = Visibility.Visible;
             }
         }
     }
