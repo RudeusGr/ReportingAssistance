@@ -18,6 +18,7 @@ namespace ReportingAssistance.Model
             DicRouteDate = new();
             isDriver = false;
             isWorkMonday = false;
+            Money = 0;
         }
         public void AssistancesIncremente()
         {
@@ -34,6 +35,7 @@ namespace ReportingAssistance.Model
         public int Delays { get; set; }
         public bool isDriver { get; set; }
         public bool isWorkMonday {  get; set; }
+        public int Money { get; set; }
         public Dictionary<string, int> DicRouteDate { get; set; }
     }
 

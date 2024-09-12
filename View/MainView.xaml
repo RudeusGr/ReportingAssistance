@@ -133,7 +133,7 @@
                             Grid.Row="2"
                             Orientation="Vertical"
                             Margin="0,30,0,0">
-                    
+
                     <Image Source="../Images/logo_grupo_modelo.png" Width="100" Height="100"/>
                     <TextBlock Text="Reporte De Asistencias En Ruta"
                                Foreground="White"
@@ -148,7 +148,6 @@
                             FontSize="16"
                             FontFamily="Montserrat"
                             Cursor="Hand"
-                            Grid.Column="2"
                             Margin="0,20,0,20"
                             HorizontalAlignment="Left"
                             Click="btnSearhFileBiotimer_Click">
@@ -188,64 +187,8 @@
                              Width="400"
                              HorizontalAlignment="Left"
                              VerticalContentAlignment="Center"
-                             Padding="20,0,0,0">
-
-                        <TextBox.Background>
-                            <ImageBrush ImageSource="../Images/excel_icon.png"
-                                        Stretch="None"
-                                        AlignmentX="Left"/>
-                        </TextBox.Background>
-
-                    </TextBox>
-
-                    <Button x:Name="btnSearhFileAssistanceRoute"
-                            BorderThickness="0"
-                            Content="Archivo Asistencia"
-                            Foreground="White"
-                            FontSize="16"
-                            FontFamily="Montserrat"
-                            Cursor="Hand"
-                            Grid.Column="2"
-                            Margin="0,20,0,20"
-                            HorizontalAlignment="Left"
-                            Click="btnSearhFileAssistanceRoute_Click">
-
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="#00296b"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#00509d"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Width="150"
-                                        Height="30"
-                                        CornerRadius="15"
-                                        Background="{TemplateBinding Background}">
-                                    <ContentPresenter VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <TextBox x:Name="txtFileNameAssistanceRoute"
-                             FontSize="14"
-                            FontWeight="Medium"
-                            FontFamily="Montserrat"
-                            Foreground="White"
-                            CaretBrush="LightGray"
-                            BorderBrush="DarkGray"
-                            BorderThickness="0,0,0,2"
-                            Width="400"
-                            HorizontalAlignment="Left"
-                            VerticalContentAlignment="Center"
-                            Padding="20,0,0,0">
+                             Padding="20,0,0,0"
+                             Cursor="">
 
                         <TextBox.Background>
                             <ImageBrush ImageSource="../Images/excel_icon.png"
@@ -264,7 +207,7 @@
                          BorderBrush="DarkGray"
                          BorderThickness="0,0,0,2"
                          Width="300"
-                         HorizontalAlignment="Right"
+                         HorizontalAlignment="Left"
                          VerticalContentAlignment="Center"
                          Margin="0,20,0,0"
                          Padding="20,0,0,0"
@@ -272,76 +215,250 @@
 
                         <TextBox.Background>
                             <ImageBrush ImageSource="../Images/payment_icon.png"
-                                        Stretch="None"
-                                        AlignmentX="Left"/>
+                                    Stretch="None"
+                                    AlignmentX="Left"/>
                         </TextBox.Background>
 
                     </TextBox>
 
-                    <Label x:Name="txtSalaryDriverPlaceholder" HorizontalAlignment="Right" Foreground="White" FontSize="12" Margin="0,-25,180,0" Content="Salario Chofer..." Background="Transparent" Opacity="0.5" IsHitTestVisible="False"/>
+                    <Label x:Name="txtSalaryDriverPlaceholder" HorizontalAlignment="Left" Foreground="White" FontSize="12" Margin="20,-25,180,0" Content="Salario Chofer..." Background="Transparent" Opacity="0.5" IsHitTestVisible="False"/>
 
                     <TextBox x:Name="txtSalaryAux"
-                         FontSize="14"
-                         FontWeight="Medium"
-                         FontFamily="Montserrat"
-                         Foreground="White"
-                         CaretBrush="LightGray"
-                         BorderBrush="DarkGray"
-                         BorderThickness="0,0,0,2"
-                         Width="300"
-                         HorizontalAlignment="Right"
-                         VerticalContentAlignment="Center"
-                         Margin="0,20,0,0"
-                         Padding="20,0,0,0"
-                         TextChanged="txtSalaryAux_TextChanged">
+                             FontSize="14"
+                             FontWeight="Medium"
+                             FontFamily="Montserrat"
+                             Foreground="White"
+                             CaretBrush="LightGray"
+                             BorderBrush="DarkGray"
+                             BorderThickness="0,0,0,2"
+                             Width="300"
+                             HorizontalAlignment="Left"
+                             VerticalContentAlignment="Center"
+                             Margin="0,20,0,0"
+                             Padding="20,0,0,0"
+                             TextChanged="txtSalaryAux_TextChanged">
 
                         <TextBox.Background>
                             <ImageBrush ImageSource="../Images/payment_icon.png"
-                                        Stretch="None"
-                                        AlignmentX="Left"/>
+                                Stretch="None"
+                                AlignmentX="Left"/>
                         </TextBox.Background>
 
                     </TextBox>
 
-                    <Label x:Name="txtSalaryAuxPlaceholder" HorizontalAlignment="Right" Foreground="White" FontSize="12" Margin="0,-25,180,0" Content="Salario Auxiliar..." Background="Transparent" Opacity="0.5" IsHitTestVisible="False"/>
+                    <Label x:Name="txtSalaryAuxPlaceholder" HorizontalAlignment="Left" Foreground="White" FontSize="12" Margin="20,-25,180,0" Content="Salario Auxiliar..." Background="Transparent" Opacity="0.5" IsHitTestVisible="False"/>
 
-                    <Button x:Name="btnRegenerateReport"
-                            BorderThickness="0"
-                            Content="Generar"
-                            Foreground="White"
-                            FontSize="16"
-                            FontFamily="Montserrat"
-                            Cursor="Hand"
-                            Grid.Column="2"
-                            Margin="0,50,0,0"
-                            Click="btnRegenerateReport_Click"
+                    <TabControl
+                        Width="600"
+                        Height="200"
+                        Grid.Row="2"
+                        Background="#282828"
+                        Foreground="white"
+                        FontSize="12"
+                        FontFamily="Montserrat"
+                        Opacity=".95"
+                        Margin="0,20,0,0">
+
+                        <TabItem x:Name="tabAuxRoute" Header="Aux Rutas" Background="#282828" Foreground="White">
+                            <StackPanel>
+
+                                <Button x:Name="btnSearhFileAssistanceRoute"
+                                        BorderThickness="0"
+                                        Content="Archivo Asistencia"
+                                        Foreground="White"
+                                        FontSize="16"
+                                        FontFamily="Montserrat"
+                                        Cursor="Hand"
+                                        Margin="20,20,0,20"
+                                        HorizontalAlignment="Left"
+                                        Grid.Column="0"
+                                        Grid.Row="0"
+                                        Click="btnSearhFileAssistanceRoute_Click">
+
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="#00296b"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#00509d"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Width="150"
+                                                    Height="30"
+                                                    CornerRadius="15"
+                                                    Background="{TemplateBinding Background}">
+                                                <ContentPresenter VerticalAlignment="Center"
+                                                                  HorizontalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                                <TextBox x:Name="txtFileNameAssistanceRoute"
+                                         FontSize="14"
+                                         FontWeight="Medium"
+                                         FontFamily="Montserrat"
+                                         Foreground="White"
+                                         CaretBrush="LightGray"
+                                         BorderBrush="DarkGray"
+                                         BorderThickness="0,0,0,2"
+                                         Width="400"
+                                         HorizontalAlignment="Left"
+                                         VerticalContentAlignment="Center"
+                                         Margin="20,0,0,0"
+                                         Padding="20,0,0,0">
+
+                                    <TextBox.Background>
+                                        <ImageBrush ImageSource="../Images/excel_icon.png"
+                                                    Stretch="None"
+                                                    AlignmentX="Left"/>
+                                    </TextBox.Background>
+
+                                </TextBox>
+
+                                <Button x:Name="btnRegenerateReport"
+                                        BorderThickness="0"
+                                        Content="Generar"
+                                        Foreground="White"
+                                        FontSize="16"
+                                        FontFamily="Montserrat"
+                                        Cursor="Hand"
+                                        Margin="0,50,0,0"
+                                        Click="btnRegenerateReport_Click"
 >
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="#660708"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#ba181b"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="#660708"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#ba181b"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
 
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Width="150"
-                                        Height="30"
-                                        CornerRadius="15"
-                                        Background="{TemplateBinding Background}">
-                                    <ContentPresenter VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Width="150"
+                                                    Height="30"
+                                                    CornerRadius="15"
+                                                    Background="{TemplateBinding Background}">
+                                                <ContentPresenter VerticalAlignment="Center"
+                                                                  HorizontalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                            </StackPanel>
+                        </TabItem>
+
+                        <TabItem Header="Aux Festejo" Background="#282828" Foreground="White">
+                            <StackPanel>
+
+                                <Button x:Name="btnSearhFileFestRoute"
+                                        BorderThickness="0"
+                                        Content="Archivo Asistencia"
+                                        Foreground="White"
+                                        FontSize="16"
+                                        FontFamily="Montserrat"
+                                        Cursor="Hand"
+                                        Margin="20,20,0,20"
+                                        HorizontalAlignment="Left"
+                                        Grid.Column="0"
+                                        Grid.Row="0"
+                                        Click="btnSearhFileFestRoute_Click">
+
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="#00296b"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#00509d"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Width="150"
+                                                    Height="30"
+                                                    CornerRadius="15"
+                                                    Background="{TemplateBinding Background}">
+                                                <ContentPresenter VerticalAlignment="Center"
+                                                                  HorizontalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                                <TextBox x:Name="txtFileNameFestRoute"
+                                         FontSize="14"
+                                         FontWeight="Medium"
+                                         FontFamily="Montserrat"
+                                         Foreground="White"
+                                         CaretBrush="LightGray"
+                                         BorderBrush="DarkGray"
+                                         BorderThickness="0,0,0,2"
+                                         Width="400"
+                                         HorizontalAlignment="Left"
+                                         VerticalContentAlignment="Center"
+                                         Margin="20,0,0,0"
+                                         Padding="20,0,0,0">
+
+                                    <TextBox.Background>
+                                        <ImageBrush ImageSource="../Images/excel_icon.png"
+                                                    Stretch="None"
+                                                    AlignmentX="Left"/>
+                                    </TextBox.Background>
+
+                                </TextBox>
+
+                                <Button x:Name="btnRegenerateReportFest"
+                                        BorderThickness="0"
+                                        Content="Generar"
+                                        Foreground="White"
+                                        FontSize="16"
+                                        FontFamily="Montserrat"
+                                        Cursor="Hand"
+                                        Margin="0,50,0,0"
+                                        Click="btnRegenerateReportFest_Click"
+>
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="#660708"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#ba181b"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Width="150"
+                                                    Height="30"
+                                                    CornerRadius="15"
+                                                    Background="{TemplateBinding Background}">
+                                                <ContentPresenter VerticalAlignment="Center"
+                                                                  HorizontalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl>
 
                 </StackPanel>
-                
             </Grid>
 
         </Border>
