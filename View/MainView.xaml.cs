@@ -632,7 +632,7 @@ namespace ReportingAssistance.View
                 using SqlConnection DBConnection = new(connectionString);
 
                 DBConnection.Open();
-                string sqlQuery = "select ruta.cverut as cverut, venta.fecalt as fecalt, sum(detventa.canven) as bultos from tsive035 as venta inner  join tsive037 as detventa  on venta.cvevca = detventa.cvevca  inner join tsive041 as liquida on venta.cverup = liquida.cverup  inner join  tsive003 as ruta on liquida.cverut = ruta.cverut  where  liquida.fecrup between @DateInitial and @DateFinal and ruta.cvempr in (1,3) and venta.estvca  = 1   group by  ruta.cverut , venta.fecalt order by venta.fecalt asc;";
+                string sqlQuery = "select liquida.cverut as cverut , venta.fecalt as fecalt , sum(detventa.canven) as bultos , sum(detventa.impven) as dinero  from tsive035 as venta inner  join tsive037 as detventa on venta.cvevca = detventa.cvevca  inner join tsive041 as liquida on venta.cverup = liquida.cverup where  liquida.fecrup between  @DateInitial  and  @DateFinal   and  liquida.cverut in (23,24) and venta.estvca  = 1  and detventa.tmoven!='B'    group by  liquida.cverut , venta.fecalt  order by venta.fecalt asc;";
                 var registers = DBConnection.Query(sqlQuery, new { DateInitial = DateTime.Parse(DateInitial), DateFinal = DateTime.Parse(DateFinal) });
 
                 for (int i = 1; i <= lastRow; i++)
