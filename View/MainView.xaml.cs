@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
 using ReportingAssistance.Model;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -92,9 +93,10 @@ namespace ReportingAssistance.View
 
         private void btnRegenerateReport_Click(object sender, RoutedEventArgs e)
         {
-
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             if (FilePathBiotimer is null || FilePathAssistance is null)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show("Hace falta que cargue algun archivo, ya sea el arhivo de biotimer o el de asistencia, favor de verificar", "Falta cargar algun archivo");
                 return;
             }
@@ -107,6 +109,7 @@ namespace ReportingAssistance.View
 
             if (txtSalaryAux.Text == "" || txtSalaryDriver.Text == "")
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show("Asegurese de haber llenado los campos de salarios.", "Salarios no proporcionados");
                 return;
             }
@@ -121,9 +124,12 @@ namespace ReportingAssistance.View
             }
             catch (FormatException fex)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show($"El campo de salarios debe de ser un numero\n\nError: {fex}", "Error de salarios");
                 return;
             }
+
+            string PathExcel = PathDir + $"Reporte Asistencia {DateTime.Now:yyyy-MM-dd HH.mm.ss}.xlsx";
 
             using (var workbook = new XLWorkbook())
             {
@@ -239,16 +245,20 @@ namespace ReportingAssistance.View
                 worksheet.Column("O").Width = 10;
                 worksheet.Column("P").Width = 15;
 
-                workbook.SaveAs(PathDir + $"Reporte Asistencia {DateTime.Now:yyyy-MM-dd HH.mm.ss}.xlsx");
+                workbook.SaveAs(PathExcel);
                 workbook.Dispose();
             }
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
+            MessageBox.Show("Se a creado satisfactoreamente el archivo de asistencias de ruta", "Archivo Generado");
+            OpenReport(PathExcel);
         }
 
         private void btnRegenerateReportFest_Click(object sender, RoutedEventArgs e)
         {
-
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             if (FilePathBiotimer is null || FilePathAssistanceFest is null)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show("Hace falta que cargue algun archivo, ya sea el arhivo de biotimer o el de asistencia Fetejo, favor de verificar", "Falta cargar algun archivo");
                 return;
             }
@@ -261,6 +271,7 @@ namespace ReportingAssistance.View
 
             if (txtSalaryAux.Text == "" || txtSalaryDriver.Text == "")
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show("Asegurese de haber llenado los campos de salarios.", "Salarios no proporcionados");
                 return;
             }
@@ -275,9 +286,12 @@ namespace ReportingAssistance.View
             }
             catch (FormatException fex)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show($"El campo de salarios debe de ser un numero\n\nError: {fex}", "Error de salarios");
                 return;
             }
+
+            string PathExcel = PathDir + $"Reporte Festejo {DateTime.Now:yyyy-MM-dd HH.mm.ss}.xlsx";
 
             using (var workbook = new XLWorkbook())
             {
@@ -398,9 +412,12 @@ namespace ReportingAssistance.View
                 worksheet.Column("O").Width = 10;
                 worksheet.Column("P").Width = 15;
 
-                workbook.SaveAs(PathDir + $"Reporte Festejo {DateTime.Now:yyyy-MM-dd HH.mm.ss}.xlsx");
+                workbook.SaveAs(PathExcel);
                 workbook.Dispose();
             }
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
+            MessageBox.Show("Se a creado satisfactoreamente el archivo de asistencias festejo", "Archivo Generado");
+            OpenReport(PathExcel);
         }
 
         private Boolean SearchFile(int option)
@@ -441,8 +458,10 @@ namespace ReportingAssistance.View
 
         private void UploadDataBiotimer()
         {
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             if (FilePathBiotimer is null)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show("No es posible encontrar el archivo, asegurese de haberlo seleccionado.", "Archivo no encontrado");
                 return;
             } else
@@ -508,31 +527,38 @@ namespace ReportingAssistance.View
                 }
                 DicEmployeesFest = DicEmployees.ToDictionary(emp => emp.Key, emp => emp.Value);
                 workbook.Dispose();
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
             }
             catch (OpenXmlPackageException openXmlEx)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show($"Ocurrio un error inesperado con la libreria CloseXML al intentar abrir el archivo, por favor notificar al departamento de sistemas.\n Error: {openXmlEx.Message}", "Error de CloseXML");
             }
             catch (ArgumentNullException argNullEx)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show($"Ocurrio un error inesperado, existe una referencia nula, por favor notificar al departamento de sistemas.\n Error: {argNullEx.Message}", "Error de ArgumentException");
             }
             catch (IOException IOEx)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show($"Actualmente se esta utilizando el archivo, por favor cierrelo y vuelva a intentar cargarlo.\n Error: {IOEx.Message}", "Advertencia Archivo Ocupado");
             }
         }
 
         private void UploadDataAssistance()
         {
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             if (FilePathAssistance is null)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show("No es posible encontrar el archivo, asegurese de haberlo seleccionado.", "Archivo no encontrado");
                 return;
             }
 
             if (FilePathBiotimer is null || DateInitial is null || DateFinal is null)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show("Antes de cargar el archivo de Asistencia, por favor suba el archivo de Biotimer.", "Archivo no encontrado");
                 txtFileNameAssistanceRoute.Text = "";
                 return;
@@ -559,7 +585,7 @@ namespace ReportingAssistance.View
                 string sqlQuery = "select ruta.cverut as cverut, venta.fecalt as fecalt, sum(detventa.canven) as bultos from tsive035 as venta inner  join tsive037 as detventa  on venta.cvevca = detventa.cvevca  inner join tsive041 as liquida on venta.cverup = liquida.cverup  inner join  tsive003 as ruta on liquida.cverut = ruta.cverut  where  liquida.fecrup between @DateInitial and @DateFinal and ruta.cvempr in (1,3) and venta.estvca  = 1   group by  ruta.cverut , venta.fecalt order by venta.fecalt asc;";
                 var registers = DBConnection.Query(sqlQuery, new { DateInitial = DateTime.Parse(DateInitial), DateFinal = DateTime.Parse(DateFinal) });
 
-                for (int i = 1; i <= lastRow; i++)
+                for (int i = 2; i <= lastRow; i++)
                 {
                     IXLRow currentRow = sheet.Row(i);
                     sheet.Cells().Style.Fill.BackgroundColor = XLColor.White;
@@ -567,7 +593,7 @@ namespace ReportingAssistance.View
                     string currentDateInsert = currentRow.Cell(1).GetString().Remove(10);
                     int currentEmployeeInsert = currentRow.Cell(2).GetValue<int>();
                     int currentRouteInsert = currentRow.Cell(3).GetValue<int>();
-                    string currentIsDriver = currentRow.Cell(4).GetString().Trim().ToLower();
+                    string currentIsDriver = currentRow.Cell(5).GetString().Trim().ToLower();
 
                     if (DicEmployees.ContainsKey(currentEmployeeInsert))
                     {
@@ -579,36 +605,38 @@ namespace ReportingAssistance.View
                         }
                         DicEmployees[currentEmployeeInsert].isDriver = currentIsDriver.Equals("si");
                     }
-                    else
-                    {
-                        MessageBox.Show($"Se encontro al empleado {currentEmployeeInsert}, quien no aparece en el archivo de BioTimer, no sera contempleado para la generacion del archivo final, por favor darlo de alta en el checador.", "Empleado No Encntrado");
-                    }
                 }
                 workbook.Dispose();
                 DBConnection.Close();
                 DBConnection.Dispose();
                 DicEmployees = DicEmployees.Where(emp => emp.Value.DicRouteDate.IsNullOrEmpty() == false).ToDictionary(emp => emp.Key, emp => emp.Value);
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
             }
             catch (OpenXmlPackageException openXmlEx)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show($"Ocurrio un error inesperado con la libreria CloseXML al intentar abrir el archivo, por favor notificar al departamento de sistemas.\n Error: {openXmlEx.Message}", "Error de CloseXML");
             }
             catch (ArgumentNullException argNullEx)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show($"Ocurrio un error inesperado, existe una referencia nula, por favor notificar al departamento de sistemas.\n Error: {argNullEx.Message}", "Error de ArgumentException");
             }
         }
 
         private void UploadDataAssistanceFest()
         {
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             if (FilePathAssistanceFest is null)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show("No es posible encontrar el archivo, asegurese de haberlo seleccionado.", "Archivo no encontrado");
                 return;
             }
 
             if (FilePathBiotimer is null || DateInitial is null || DateFinal is null)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show("Antes de cargar el archivo de Asistencia, por favor suba el archivo de Biotimer.", "Archivo no encontrado");
                 txtFileNameFestRoute.Text = "";
                 return;
@@ -643,7 +671,7 @@ namespace ReportingAssistance.View
                     string currentDateInsert = currentRow.Cell(1).GetString().Remove(10);
                     int currentEmployeeInsert = currentRow.Cell(2).GetValue<int>();
                     int currentRouteInsert = currentRow.Cell(3).GetValue<int>();
-                    string currentIsDriver = currentRow.Cell(4).GetString().Trim().ToLower();
+                    string currentIsDriver = currentRow.Cell(5).GetString().Trim().ToLower();
 
                     if (DicEmployeesFest.ContainsKey(currentEmployeeInsert))
                     {
@@ -662,23 +690,44 @@ namespace ReportingAssistance.View
                             }
                         }
                     }
-                    else
-                    {
-                        MessageBox.Show($"Se encontro al empleado {currentEmployeeInsert}, quien no aparece en el archivo de BioTimer, no sera contempleado para la generacion del archivo final, por favor darlo de alta en el checador.", "Empleado No Encntrado");
-                    }
                 }
                 workbook.Dispose();
                 DBConnection.Close();
                 DBConnection.Dispose();
                 DicEmployeesFest = DicEmployeesFest.Where(emp => emp.Value.DicRouteDate.IsNullOrEmpty() == false).ToDictionary(emp => emp.Key, emp => emp.Value);
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
             }
             catch (OpenXmlPackageException openXmlEx)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show($"Ocurrio un error inesperado con la libreria CloseXML al intentar abrir el archivo, por favor notificar al departamento de sistemas.\n Error: {openXmlEx.Message}", "Error de CloseXML");
             }
             catch (ArgumentNullException argNullEx)
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                 MessageBox.Show($"Ocurrio un error inesperado, existe una referencia nula, por favor notificar al departamento de sistemas.\n Error: {argNullEx.Message}", "Error de ArgumentException");
+            }
+        }
+
+        private void OpenReport(string path)
+        {
+            try
+            {
+                var info = new ProcessStartInfo()
+                {
+                    UseShellExecute = true,
+                    CreateNoWindow = true,
+                    FileName = path,
+                    WindowStyle = ProcessWindowStyle.Maximized
+                };
+                Process.Start(info);
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("Hubo al ejecutar el reporte" + ex, "Error!!", MessageBoxButton.OK, MessageBoxImage.Error);
+
             }
         }
 

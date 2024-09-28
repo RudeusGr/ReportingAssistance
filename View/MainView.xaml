@@ -259,12 +259,38 @@
                         Opacity=".95"
                         Margin="0,20,0,0">
 
+                        <TabControl.Resources>
+                            <Style TargetType="TabItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="TabItem">
+                                            <Grid Name="Panel">
+                                                <ContentPresenter x:Name="ContentSite"
+                                                        VerticalAlignment="Center"
+                                                        HorizontalAlignment="Center"
+                                                        ContentSource="Header"
+                                                        Margin="10,2"/>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="Panel" Property="Background" Value="#111d4a" />
+                                                </Trigger>
+                                                <Trigger Property="IsSelected" Value="False">
+                                                    <Setter TargetName="Panel" Property="Background" Value="#282828" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TabControl.Resources>
+
                         <TabItem x:Name="tabAuxRoute" Header="Aux Rutas" Background="#282828" Foreground="White">
                             <StackPanel>
 
                                 <Button x:Name="btnSearhFileAssistanceRoute"
                                         BorderThickness="0"
-                                        Content="Archivo Asistencia"
+                                        Content="Asistencia Rutas"
                                         Foreground="White"
                                         FontSize="16"
                                         FontFamily="Montserrat"
@@ -363,7 +389,7 @@
 
                                 <Button x:Name="btnSearhFileFestRoute"
                                         BorderThickness="0"
-                                        Content="Archivo Asistencia"
+                                        Content="Asistencia Festejo"
                                         Foreground="White"
                                         FontSize="16"
                                         FontFamily="Montserrat"

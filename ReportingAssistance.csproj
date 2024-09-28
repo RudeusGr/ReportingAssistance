@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>logo_grupo_modelo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,10 @@
     <None Remove="Images\logo_grupo_modelo.png" />
     <None Remove="Images\modelo_especial.jpg" />
     <None Remove="Images\payment_icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="logo_grupo_modelo.ico" />
   </ItemGroup>
 
   <ItemGroup>
